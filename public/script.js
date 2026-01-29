@@ -31,10 +31,10 @@ async function fetchFreshVotes() {
         const data = await response.json();
 
         container.innerHTML = '';
-        
-        for (const vote of data.houseRollCallVotes) {
-            await displayVoteDetails(vote);
-        }
+
+        await Promise.all(data.houseRollCallVotes.map(vote =>
+            displayVoteDetails(vote)
+        ));
         
     } catch (error) {
         console.error('API Error:', error);
