@@ -148,6 +148,6 @@ app.post('/api/admin/clear-cache', (req, res) => {
 });
 
 // static front-end (adjust path if needed)
-app.use(express.static('public'));   // serves index.html from parent folder
+app.use(express.static('../public'));   // serves index.html from parent folder
 
 app.listen(PORT, () => console.log(`API listening on :${PORT}`));
