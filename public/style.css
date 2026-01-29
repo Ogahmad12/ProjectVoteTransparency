@@ -258,10 +258,14 @@ footer {
         margin-bottom: 10px;
     }
 
-    .reps {
+    .party-breakdown .reps, .reps {
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
+    }
+
+    .party-breakdown > div {
+        width: 100%;
     }
 }
 
@@ -279,6 +283,7 @@ footer {
     flex: 500px;
     max-height: 400px;
     position: relative;
+    contain: layout style;
 }
 
 .vote-card .question {

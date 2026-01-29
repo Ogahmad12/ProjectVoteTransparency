@@ -158,15 +158,18 @@ async function getRepByZip(zip) {
 
 function filterCardsByRep(rep) {
     const banner = document.getElementById('filterActive');
-    const cards = document.querySelectorAll('.vote-card');
+    const cards = Array.from(document.querySelectorAll('.vote-card'));
     
     if (!rep) {
-        cards.forEach(c => {
-            c.style.display = 'block';
-            c.classList.remove('filtered-view');
-        });
-        document.querySelectorAll('.member-vote.my-rep').forEach(el => {
-            el.classList.remove('my-rep');
+        // Batch reset - much faster
+        requestAnimationFrame(() => {
+            cards.forEach(c => {
+                c.style.display = 'block';
+                c.classList.remove('filtered-view');
+            });
+            document.querySelectorAll('.member-vote.my-rep').forEach(el => {
+                el.classList.remove('my-rep');
+            });
         });
         if (banner) banner.style.display = 'none';
         return;
@@ -174,17 +177,25 @@ function filterCardsByRep(rep) {
 
     if (banner) banner.style.display = 'block';
 
-    cards.forEach(card => {
+    // Pre-calculate which cards match (no DOM touching yet)
+    const matches = cards.map(card => {
         try {
             const members = JSON.parse(card.dataset.members || '[]');
-            const voted = members.some(m => m.lastName === rep.lastName);
+            return members.some(m => m.lastName === rep.lastName);
+        } catch (e) {
+            return false;
+        }
+    });
 
-            if (voted) {
+    // Batch DOM updates in one frame
+    requestAnimationFrame(() => {
+        cards.forEach((card, i) => {
+            if (matches[i]) {
                 card.style.display = 'block';
                 card.classList.add('filtered-view');
                 
-                const memberVotes = card.querySelectorAll('.member-vote');
-                memberVotes.forEach(el => {
+                // Highlight only within this card
+                card.querySelectorAll('.member-vote').forEach(el => {
                     if (el.dataset.lastname?.toLowerCase().trim() === rep.lastName?.toLowerCase().trim()) {
                         el.classList.add('my-rep');
                     } else {
@@ -194,9 +205,7 @@ function filterCardsByRep(rep) {
             } else {
                 card.style.display = 'none';
             }
-        } catch (e) {
-            card.style.display = 'none';
-        }
+        });
     });
 }
 
