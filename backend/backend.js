@@ -34,7 +34,7 @@ async function getOrCache(key, fetchFn, ttl = null) {
 
 const limiter = ratelimit({
   windowMs: 60 * 1000,
-  max: 60,
+  max: 1000,
   message: 'Too many requests, please slow down',
   standardHeaders: true,
   legacyHeaders: false,
