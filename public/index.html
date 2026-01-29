@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Security-Policy" 
+              content="default-src 'self'; 
+                       script-src 'self'; 
+                       style-src 'self' 'unsafe-inline';
+                       img-src 'self' data: https://upload.wikimedia.org;
+                       connect-src 'self' http://localhost:3000;
+                       object-src 'none';
+                       base-uri 'self';
+                       form-action 'self';">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>U.S. House Vote Tracker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <script src="script.js" defer></script>
+
+        <header>
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="US flag" class="flag-logo">
+            <h1>U.S. House Vote Tracker</h1>
+            <h2>Roll Call Votes & Member Positions</h2>
+            <div class="zip-bar">
+                <label for="zipInput">Find My Rep</label>
+                <input id="zipInput" type="text" placeholder="ZIP Code (5 digits)" maxlength="5" pattern="\d{5}">
+                <button id="zipBtn">Search</button>
+                <button id="clearBtn">Clear</button>
+            </div>
+            <a href="https://ko-fi.com/YOUR_USERNAME" target="_blank" class="donate-btn">Donate</a>
+        </header>
+
+        <main class="container">
+            <div id="filterActive">Highlighting votes for your representative</div>
+            <p>Recent roll call votes from the House of Representatives. Enter your ZIP code to highlight your representative's voting record.</p>
+
+            <div id="voteList"></div>
+        </main>
+
+    </body>
+
+
+    <footer>
+        <p class="footer-text">© 2026 Congress Vote Tracker
+            (THIS WEBSITE IS NOT AFFILIATED WITH THE U.S GOVERNMENT)</p>
+    </footer>
+</html>
