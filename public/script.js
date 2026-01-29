@@ -26,7 +26,7 @@ async function fetchFreshVotes() {
     const container = document.getElementById('voteList');
     
     try {
-        container.innerHTML = '<div class="loading"> Loading votes.. </div>';
+        container.innerHTML = '<div class="loading"> Loading votes.. (Approx. 5-10 seconds) </div>';
 
         const response = await fetch(`/api/votes`);
         const data = await response.json();
@@ -75,14 +75,12 @@ async function displayVoteDetails(vote) {
         }
     }
     
-    // Get vote details
     const voteResponse = await fetch(
         `/api/vote-detail?roll=${rollCallNumber}`
     );
     const voteDetails = await voteResponse.json();
     const voteData = voteDetails.houseRollCallVote;
     
-    // Get member votes
     const membersResponse = await fetch(
         `/api/vote-members?roll=${rollCallNumber}`
     );
@@ -117,7 +115,6 @@ async function displayVoteDetails(vote) {
         }
     }
     
-    // Return the complete HTML string
     return `
         <div class="vote-card" data-roll="${rollCallNumber}" data-members='${JSON.stringify(memberVotes)}'>
             <div class="card-top">
