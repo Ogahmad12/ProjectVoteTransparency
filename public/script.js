@@ -158,13 +158,15 @@ async function getRepByZip(zip) {
 
 function filterCardsByRep(rep) {
     const banner = document.getElementById('filterActive');
+    const cards = document.querySelectorAll('.vote-card');
+    
     if (!rep) {
-        document.querySelectorAll('.vote-card').forEach(c => {
+        cards.forEach(c => {
             c.style.display = 'block';
             c.classList.remove('filtered-view');
-            c.querySelectorAll('.member-vote').forEach(el => {
-                el.classList.remove('my-rep');
-            });
+        });
+        document.querySelectorAll('.member-vote.my-rep').forEach(el => {
+            el.classList.remove('my-rep');
         });
         if (banner) banner.style.display = 'none';
         return;
@@ -172,7 +174,7 @@ function filterCardsByRep(rep) {
 
     if (banner) banner.style.display = 'block';
 
-    document.querySelectorAll('.vote-card').forEach(card => {
+    cards.forEach(card => {
         try {
             const members = JSON.parse(card.dataset.members || '[]');
             const voted = members.some(m => m.lastName === rep.lastName);
@@ -180,8 +182,9 @@ function filterCardsByRep(rep) {
             if (voted) {
                 card.style.display = 'block';
                 card.classList.add('filtered-view');
-
-                card.querySelectorAll('.member-vote').forEach(el => {
+                
+                const memberVotes = card.querySelectorAll('.member-vote');
+                memberVotes.forEach(el => {
                     if (el.dataset.lastname?.toLowerCase().trim() === rep.lastName?.toLowerCase().trim()) {
                         el.classList.add('my-rep');
                     } else {
@@ -191,7 +194,9 @@ function filterCardsByRep(rep) {
             } else {
                 card.style.display = 'none';
             }
-        } catch (e) {card.style.display = 'none';}
+        } catch (e) {
+            card.style.display = 'none';
+        }
     });
 }
 
