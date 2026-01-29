@@ -26,21 +26,20 @@ async function fetchFreshVotes() {
     const container = document.getElementById('voteList');
     
     try {
-        const response = await fetch(`/api/votes`);
+        container.innerHTML = '<div class="loading"> Loading votes.. </div>';
 
+        const response = await fetch(`/api/votes`);
         const data = await response.json();
 
-        container.innerHTML = '';
+        const voteCardsHTML = await Promise.all(
+            data.houseRollCallVotes.map(vote => displayVoteDetails(vote))
+        );
 
-        await Promise.all(data.houseRollCallVotes.map(vote =>
-            displayVoteDetails(vote)
-        ));
+        container.innerHTML = voteCardsHTML.join('');
         
     } catch (error) {
         console.error('API Error:', error);
-        if (container.innerHTML === '') {
-            container.innerHTML = '<p>Error loading votes. Please refresh.</p>';
-        }
+        container.innerHTML = '<p>Error loading votes. Please refresh.</p>'
     }
 }
 
@@ -118,8 +117,8 @@ async function displayVoteDetails(vote) {
         }
     }
     
-    // Create the card
-    const voteHTML = `
+    // Return the complete HTML string
+    return `
         <div class="vote-card" data-roll="${rollCallNumber}" data-members='${JSON.stringify(memberVotes)}'>
             <div class="card-top">
                 <h3>${legislationType || 'Motion'} ${legislationNumber || ''}: ${title}</h3>
@@ -141,8 +140,6 @@ async function displayVoteDetails(vote) {
             </div>
         </div>
     `;
-
-    document.getElementById('voteList').insertAdjacentHTML('afterbegin', voteHTML);
 }
 
 async function getRepByZip(zip) {
